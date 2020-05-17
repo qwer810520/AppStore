@@ -13,6 +13,8 @@
 		39EFAFCA247114C200A5E02C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39EFAFC9247114C200A5E02C /* Assets.xcassets */; };
 		39EFAFCD247114C200A5E02C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39EFAFCB247114C200A5E02C /* LaunchScreen.storyboard */; };
 		39EFAFD8247114C200A5E02C /* AppStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFAFD7247114C200A5E02C /* AppStoreTests.swift */; };
+		39EFB0112471173100A5E02C /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB0102471173100A5E02C /* BaseTabBarController.swift */; };
+		39EFB013247122EB00A5E02C /* AppsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB012247122EB00A5E02C /* AppsSearchController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		39EFAFD3247114C200A5E02C /* AppStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		39EFAFD7247114C200A5E02C /* AppStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreTests.swift; sourceTree = "<group>"; };
 		39EFAFD9247114C200A5E02C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		39EFB0102471173100A5E02C /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
+		39EFB012247122EB00A5E02C /* AppsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsSearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,7 @@
 		39EFAFBF247114BE00A5E02C /* AppStore */ = {
 			isa = PBXGroup;
 			children = (
+				39EFB00E2471170700A5E02C /* ViewControllers */,
 				39EFAFC0247114BE00A5E02C /* AppDelegate.swift */,
 				39EFAFC2247114BE00A5E02C /* SceneDelegate.swift */,
 				39EFAFC4247114BE00A5E02C /* ViewController.swift */,
@@ -94,6 +99,23 @@
 				39EFAFD9247114C200A5E02C /* Info.plist */,
 			);
 			path = AppStoreTests;
+			sourceTree = "<group>";
+		};
+		39EFB00E2471170700A5E02C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				39EFB00F2471171300A5E02C /* TabbarControllers */,
+				39EFB012247122EB00A5E02C /* AppsSearchController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		39EFB00F2471171300A5E02C /* TabbarControllers */ = {
+			isa = PBXGroup;
+			children = (
+				39EFB0102471173100A5E02C /* BaseTabBarController.swift */,
+			);
+			path = TabbarControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,8 +218,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39EFB0112471173100A5E02C /* BaseTabBarController.swift in Sources */,
 				39EFAFC5247114BE00A5E02C /* ViewController.swift in Sources */,
 				39EFAFC1247114BE00A5E02C /* AppDelegate.swift in Sources */,
+				39EFB013247122EB00A5E02C /* AppsSearchController.swift in Sources */,
 				39EFAFC3247114BE00A5E02C /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
