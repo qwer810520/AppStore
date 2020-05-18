@@ -15,6 +15,9 @@
 		39EFAFD8247114C200A5E02C /* AppStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFAFD7247114C200A5E02C /* AppStoreTests.swift */; };
 		39EFB0112471173100A5E02C /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB0102471173100A5E02C /* BaseTabBarController.swift */; };
 		39EFB013247122EB00A5E02C /* AppsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB012247122EB00A5E02C /* AppsSearchController.swift */; };
+		39EFB0162471332000A5E02C /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB0152471332000A5E02C /* SearchResultCell.swift */; };
+		39EFB0192472AEF800A5E02C /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB0182472AEF800A5E02C /* UIView+Layout.swift */; };
+		39EFB01B2472B7A800A5E02C /* VerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFB01A2472B7A800A5E02C /* VerticalStackView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,9 @@
 		39EFAFD9247114C200A5E02C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39EFB0102471173100A5E02C /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		39EFB012247122EB00A5E02C /* AppsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsSearchController.swift; sourceTree = "<group>"; };
+		39EFB0152471332000A5E02C /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
+		39EFB0182472AEF800A5E02C /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
+		39EFB01A2472B7A800A5E02C /* VerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +87,8 @@
 		39EFAFBF247114BE00A5E02C /* AppStore */ = {
 			isa = PBXGroup;
 			children = (
+				39EFB0172472AEC700A5E02C /* Helpers */,
+				39EFB014247132FD00A5E02C /* Views */,
 				39EFB00E2471170700A5E02C /* ViewControllers */,
 				39EFAFC0247114BE00A5E02C /* AppDelegate.swift */,
 				39EFAFC2247114BE00A5E02C /* SceneDelegate.swift */,
@@ -116,6 +124,23 @@
 				39EFB0102471173100A5E02C /* BaseTabBarController.swift */,
 			);
 			path = TabbarControllers;
+			sourceTree = "<group>";
+		};
+		39EFB014247132FD00A5E02C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				39EFB0152471332000A5E02C /* SearchResultCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		39EFB0172472AEC700A5E02C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				39EFB0182472AEF800A5E02C /* UIView+Layout.swift */,
+				39EFB01A2472B7A800A5E02C /* VerticalStackView.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,6 +247,9 @@
 				39EFAFC5247114BE00A5E02C /* ViewController.swift in Sources */,
 				39EFAFC1247114BE00A5E02C /* AppDelegate.swift in Sources */,
 				39EFB013247122EB00A5E02C /* AppsSearchController.swift in Sources */,
+				39EFB0162471332000A5E02C /* SearchResultCell.swift in Sources */,
+				39EFB01B2472B7A800A5E02C /* VerticalStackView.swift in Sources */,
+				39EFB0192472AEF800A5E02C /* UIView+Layout.swift in Sources */,
 				39EFAFC3247114BE00A5E02C /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
