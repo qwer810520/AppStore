@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39D213952474019C00030C8B /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D213942474019C00030C8B /* SearchResult.swift */; };
+		39D213982474055800030C8B /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D213972474055800030C8B /* Service.swift */; };
 		39EFAFC1247114BE00A5E02C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFAFC0247114BE00A5E02C /* AppDelegate.swift */; };
 		39EFAFC3247114BE00A5E02C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFAFC2247114BE00A5E02C /* SceneDelegate.swift */; };
 		39EFAFC5247114BE00A5E02C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EFAFC4247114BE00A5E02C /* ViewController.swift */; };
@@ -31,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		39D213942474019C00030C8B /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		39D213972474055800030C8B /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		39EFAFBD247114BE00A5E02C /* AppStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39EFAFC0247114BE00A5E02C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		39EFAFC2247114BE00A5E02C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		39D213932474018400030C8B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				39D213942474019C00030C8B /* SearchResult.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		39D213962474054D00030C8B /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				39D213972474055800030C8B /* Service.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		39EFAFB4247114BE00A5E02C = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +107,8 @@
 		39EFAFBF247114BE00A5E02C /* AppStore */ = {
 			isa = PBXGroup;
 			children = (
+				39D213962474054D00030C8B /* Service */,
+				39D213932474018400030C8B /* Model */,
 				39EFB0172472AEC700A5E02C /* Helpers */,
 				39EFB014247132FD00A5E02C /* Views */,
 				39EFB00E2471170700A5E02C /* ViewControllers */,
@@ -244,11 +266,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				39EFB0112471173100A5E02C /* BaseTabBarController.swift in Sources */,
+				39D213952474019C00030C8B /* SearchResult.swift in Sources */,
 				39EFAFC5247114BE00A5E02C /* ViewController.swift in Sources */,
 				39EFAFC1247114BE00A5E02C /* AppDelegate.swift in Sources */,
 				39EFB013247122EB00A5E02C /* AppsSearchController.swift in Sources */,
 				39EFB0162471332000A5E02C /* SearchResultCell.swift in Sources */,
 				39EFB01B2472B7A800A5E02C /* VerticalStackView.swift in Sources */,
+				39D213982474055800030C8B /* Service.swift in Sources */,
 				39EFB0192472AEF800A5E02C /* UIView+Layout.swift in Sources */,
 				39EFAFC3247114BE00A5E02C /* SceneDelegate.swift in Sources */,
 			);
