@@ -7,11 +7,22 @@
 //
 
 import UIKit
+import SDWebImage
 
 class AppsSearchController: UICollectionViewController {
 
   fileprivate let cellId = "id1234"
   private var appResults = [Result]()
+  private var timer: Timer?
+
+  private let searchController = UISearchController(searchResultsController: nil)
+  private let enterSearchTremLabel: UILabel = {
+    let label = UILabel()
+    label.text = "Please enter search term above..."
+    label.textAlignment = .center
+    label.font = UIFont.boldSystemFont(ofSize: 20)
+    return label
+  }()
 
   // MARK: - UIViewController
 
@@ -28,13 +39,26 @@ class AppsSearchController: UICollectionViewController {
 
     collectionView.backgroundColor = .white
     collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: cellId)
-    fatchItunesApps()
+
+    view.addSubview(enterSearchTremLabel)
+    enterSearchTremLabel.fillSuperview()
+    setUpSearchBar()
+//    fatchItunesApps()
   }
 
   // MARK: - Private Methods
 
+  private func setUpSearchBar() {
+    definesPresentationContext = true
+    navigationItem.searchController = searchController
+    navigationItem.hidesSearchBarWhenScrolling = false
+    searchController.searchBar.delegate = self
+  }
+
+  // MARK: - API Methods
+
   private func fatchItunesApps() {
-    Service.shared.fetchApps { results, error in
+    Service.shared.fetchApps(searchTerm: "Twitter") { results, error in
       if let error = error {
         print("Failed to fetch apps:", error)
       }
@@ -50,6 +74,7 @@ class AppsSearchController: UICollectionViewController {
 
 extension AppsSearchController {
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    enterSearchTremLabel.isHidden = !appResults.isEmpty
     return appResults.count
   }
 
@@ -57,15 +82,7 @@ extension AppsSearchController {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? SearchResultCell else {
       fatalError("SearchResultCell Initialization Fail")
     }
-    let appResult = appResults[indexPath.item]
-    cell.nameLabel.text = appResult.trackName
-    cell.categoryLabel.text = appResult.primaryGenreName
-    cell.ratingsLabel.text = "Rating: \(appResult.averageUserRating ?? 0)"
-
-//    cell.appIconImageView
-//    cell.screenshort1ImageView
-
-
+    cell.appResult = appResults[indexPath.item]
     return cell
   }
 }
@@ -75,5 +92,23 @@ extension AppsSearchController {
 extension AppsSearchController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return .init(width: view.frame.width, height: 350)
+  }
+}
+
+  // MARK: - UISearchBarDelegate
+
+extension AppsSearchController: UISearchBarDelegate {
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    print(searchText)
+
+    timer?.invalidate()
+    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
+      Service.shared.fetchApps(searchTerm: searchText) { (res, error) in
+        self.appResults = res
+        DispatchQueue.main.async {
+          self.collectionView.reloadData()
+        }
+      }
+    })
   }
 }

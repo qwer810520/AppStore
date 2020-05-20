@@ -6,6 +6,7 @@ target 'AppStore' do
   use_frameworks!
 
   # Pods for AppStore
+	pod 'SDWebImage'
 
   target 'AppStoreTests' do
     inherit! :search_paths
