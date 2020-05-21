@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class AppsSearchController: UICollectionViewController {
+class AppsSearchController: BaseListController {
 
   fileprivate let cellId = "id1234"
   private var appResults = [Result]()
@@ -26,22 +26,14 @@ class AppsSearchController: UICollectionViewController {
 
   // MARK: - UIViewController
 
-  init() {
-    super.init(collectionViewLayout: UICollectionViewFlowLayout())
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   override func viewDidLoad() {
     super.viewDidLoad()
 
     collectionView.backgroundColor = .white
     collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: cellId)
 
-    view.addSubview(enterSearchTremLabel)
-    enterSearchTremLabel.fillSuperview()
+    collectionView.addSubview(enterSearchTremLabel)
+    enterSearchTremLabel.fillSuperview(padding: .init(top: 100, left: 50, bottom: 0, right: 50))
     setUpSearchBar()
 //    fatchItunesApps()
   }
