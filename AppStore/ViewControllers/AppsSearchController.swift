@@ -50,11 +50,11 @@ class AppsSearchController: BaseListController {
   // MARK: - API Methods
 
   private func fatchItunesApps() {
-    Service.shared.fetchApps(searchTerm: "Twitter") { results, error in
+    Service.shared.fetchApps(searchTerm: "Twitter") { searchResult, error in
       if let error = error {
         print("Failed to fetch apps:", error)
       }
-      self.appResults = results
+      self.appResults = searchResult?.results ?? []
       DispatchQueue.main.async {
         self.collectionView.reloadData()
       }
@@ -96,7 +96,7 @@ extension AppsSearchController: UISearchBarDelegate {
     timer?.invalidate()
     timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
       Service.shared.fetchApps(searchTerm: searchText) { (res, error) in
-        self.appResults = res
+        self.appResults = res?.results ?? []
         DispatchQueue.main.async {
           self.collectionView.reloadData()
         }
