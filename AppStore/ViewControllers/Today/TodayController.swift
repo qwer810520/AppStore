@@ -11,6 +11,7 @@ import UIKit
 class TodayController: BaseListController {
 
   let cellId = "cellId"
+  var startingFrame: CGRect?
 
   // MARK: - UIViewController
 
@@ -20,6 +21,17 @@ class TodayController: BaseListController {
 
     collectionView.backgroundColor = #colorLiteral(red: 0.9489468932, green: 0.9490604997, blue: 0.9489081502, alpha: 1)
     collectionView.register(TodayCell.self, forCellWithReuseIdentifier: cellId)
+  }
+
+  // MARK: - Private Methods
+
+  @objc private func handleRemoveRedView(gesture: UITapGestureRecognizer) {
+//    gesture.view?.removeFromSuperview()
+    UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
+      gesture.view?.frame = self.startingFrame ?? .zero
+    }, completion: { _ in
+      gesture.view?.removeFromSuperview()
+    })
   }
 }
 
@@ -43,6 +55,22 @@ extension TodayController {
 extension TodayController: UICollectionViewDelegateFlowLayout {
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     print("Animate fullscreen somehow...")
+    let redView = UIView()
+    redView.backgroundColor = .red
+    redView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleRemoveRedView(gesture:))))
+    view.addSubview(redView)
+
+    guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+
+    guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
+    self.startingFrame = startingFrame
+    redView.frame = startingFrame
+    redView.layer.cornerRadius = 16
+
+
+    UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
+      redView.frame = self.view.frame
+    })
   }
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
