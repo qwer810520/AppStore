@@ -102,7 +102,7 @@ extension UIView {
     widthAnchor.constraint(equalToConstant: constant).isActive = true
   }
 
-  func constrainHeigjt(constant: CGFloat) {
+  func constrainHeight(constant: CGFloat) {
     translatesAutoresizingMaskIntoConstraints = false
     heightAnchor.constraint(equalToConstant: constant).isActive = true
   }

@@ -33,11 +33,11 @@ class AppRowCell: UICollectionViewCell {
 
     imageView.backgroundColor = .purple
     imageView.constrainWidth(constant: 64)
-    imageView.constrainHeigjt(constant: 64)
+    imageView.constrainHeight(constant: 64)
 
     getButton.backgroundColor = .init(white: 0.95, alpha: 1)
     getButton.constrainWidth(constant: 80)
-    getButton.constrainHeigjt(constant: 32)
+    getButton.constrainHeight(constant: 32)
     getButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
     getButton.layer.cornerRadius = 32 / 2
 
