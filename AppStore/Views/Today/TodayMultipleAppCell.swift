@@ -20,8 +20,7 @@ class TodayMultipleAppCell: BaseTodayCell {
   let categoryLabel = UILabel(text: "LIFT HACK", font: .boldSystemFont(ofSize: 20))
   let titleLabel = UILabel(text: "Utilizing your Time", font: .boldSystemFont(ofSize: 32), numberOfLines: 3)
 
-  let multipleAppViewController = UIViewController()
-
+  let multipleAppViewController = TodayMultipleAppsController()
 
   // MARK: - Initialization
 
@@ -30,8 +29,6 @@ class TodayMultipleAppCell: BaseTodayCell {
 
     backgroundColor = .white
     layer.cornerRadius = 16
-
-    multipleAppViewController.view.backgroundColor = .red
 
     let stackView = VerticalStackView(arrangedSubviews: [
       categoryLabel,
