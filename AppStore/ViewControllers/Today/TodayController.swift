@@ -112,6 +112,28 @@ class TodayController: BaseListController {
       self.collectionView.reloadData()
     }
   }
+
+  // MARK: - Action Methods
+
+  @objc private func handleMultipleAppsTap(gesture: UIGestureRecognizer) {
+
+    let collectionView = gesture.view
+
+    var superview = collectionView?.superview
+    while superview != nil {
+      if let cell = superview as? TodayMultipleAppCell {
+        guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
+
+        let apps = self.items[indexPath.item].apps
+
+        let fullController = TodayMultipleAppsController(mode: .fullscreen)
+        fullController.apps = apps
+        present(fullController, animated: true)
+
+      }
+      superview = superview?.superview
+    }
+  }
 }
 
   // MARK: - UICollectionViewDataSource
@@ -127,6 +149,7 @@ extension TodayController {
       fatalError("BaseTodayCell Initialization Fail")
     }
     cell.todayItem = items[indexPath.row]
+    (cell as? TodayMultipleAppCell)?.multipleAppViewController.collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMultipleAppsTap(gesture:))))
     return cell
   }
 }
@@ -138,9 +161,10 @@ extension TodayController: UICollectionViewDelegateFlowLayout {
 
     if items[indexPath.item].cellType == .mutltiple {
       let fullController = TodayMultipleAppsController(mode: .fullscreen)
-      fullController.modalPresentationStyle = .fullScreen
-      fullController.results = items[indexPath.item].apps
-      present(fullController, animated: true)
+      fullController.apps = items[indexPath.item].apps
+      let navi = BackEnabledNavigationController(rootViewController: fullController)
+      navi.modalPresentationStyle = .fullScreen
+      present(navi, animated: true)
       return
     }
 

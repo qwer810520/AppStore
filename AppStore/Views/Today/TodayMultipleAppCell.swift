@@ -15,7 +15,7 @@ class TodayMultipleAppCell: BaseTodayCell {
       categoryLabel.text = todayItem?.category
       titleLabel.text = todayItem?.title
 
-      multipleAppViewController.results = todayItem?.apps ?? []
+      multipleAppViewController.apps = todayItem?.apps ?? []
       multipleAppViewController.collectionView.reloadData()
     }
   }

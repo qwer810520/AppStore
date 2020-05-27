@@ -11,7 +11,7 @@ import UIKit
 class TodayMultipleAppsController: BaseListController {
 
   let cellId = "cellId"
-  var results = [FeedResult]()
+  var apps = [FeedResult]()
 
   let closeButton: UIButton = {
     let button = UIButton(type: .system)
@@ -51,6 +51,7 @@ class TodayMultipleAppsController: BaseListController {
 
     if mode == .fullscreen {
       setUpCloseButton()
+      navigationController?.setNavigationBarHidden(true, animated: true)
     }
   }
 
@@ -72,14 +73,14 @@ class TodayMultipleAppsController: BaseListController {
 
 extension TodayMultipleAppsController {
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return mode == .small ? min(4, results.count) : results.count
+    return mode == .small ? min(4, apps.count) : apps.count
   }
 
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? MultipleAppCell else {
       fatalError("MultipleAppCell Initialization Fail")
     }
-    cell.app = results[indexPath.item]
+    cell.app = apps[indexPath.item]
     return cell
   }
 }
@@ -87,6 +88,12 @@ extension TodayMultipleAppsController {
   // MARK: - UICollectionViewDelegateFlowLayout
 
 extension TodayMultipleAppsController: UICollectionViewDelegateFlowLayout {
+  override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let appId = apps[indexPath.item].id
+    let appDetailController = AppDetailController(appId: appId)
+    navigationController?.pushViewController(appDetailController, animated: true)
+  }
+
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return mode == .small ? .init(width: view.frame.width, height: (view.frame.height - 3 * spacing) / 4) : .init(width: view.frame.width - 48, height: 68)
   }
