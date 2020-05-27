@@ -8,9 +8,9 @@
 
 import UIKit
 
-class TodayCell: UICollectionViewCell {
+class TodayCell: BaseTodayCell {
 
-  var todayItem: TodayItem? {
+  override var todayItem: TodayItem? {
     didSet {
       guard let todayItem = todayItem else { return }
       categoryLabel.text = todayItem.category

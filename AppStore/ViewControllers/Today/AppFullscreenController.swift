@@ -43,7 +43,7 @@ extension AppFullscreenController {
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     switch indexPath.row {
       case 0:
-        return 450
+        return TodayController.cellSizeHeight
       default:
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
