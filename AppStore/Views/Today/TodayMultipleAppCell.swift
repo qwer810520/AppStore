@@ -23,7 +23,7 @@ class TodayMultipleAppCell: BaseTodayCell {
   let categoryLabel = UILabel(text: "LIFT HACK", font: .boldSystemFont(ofSize: 20))
   let titleLabel = UILabel(text: "Utilizing your Time", font: .boldSystemFont(ofSize: 32), numberOfLines: 3)
 
-  let multipleAppViewController = TodayMultipleAppsController()
+  let multipleAppViewController = TodayMultipleAppsController(mode: .small)
 
   // MARK: - Initialization
 
