@@ -10,12 +10,22 @@ import UIKit
 
 class TodayController: BaseListController {
 
-  let items = [
-    TodayItem(category: "LIFT HACK", title: "Utilizing your Time", image: UIImage(named: "garden") ?? UIImage(), description: "All the tools and apps you need to intelligently organize your life theright way.", backgroundColor: .white, cellType: .single),
-    TodayItem(category: "THE DAILY LIST", title: "Test-Drive these CarPlay Apps", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple),
-    TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: UIImage(named: "holiday") ?? UIImage(), description: "Find out all you need to know on how to travel without packing everything", backgroundColor: #colorLiteral(red: 0.9774419665, green: 0.9603155255, blue: 0.7258630395, alpha: 1), cellType: .single),
-    TodayItem(category: "THE DAILY LIST", title: "Test-Drive these CarPlay Apps", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple),
-  ]
+//  let items = [
+//    TodayItem(category: "LIFT HACK", title: "Utilizing your Time", image: UIImage(named: "garden") ?? UIImage(), description: "All the tools and apps you need to intelligently organize your life theright way.", backgroundColor: .white, cellType: .single),
+//    TodayItem(category: "THE DAILY LIST", title: "Test-Drive these CarPlay Apps", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple),
+//    TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: UIImage(named: "holiday") ?? UIImage(), description: "Find out all you need to know on how to travel without packing everything", backgroundColor: #colorLiteral(red: 0.9774419665, green: 0.9603155255, blue: 0.7258630395, alpha: 1), cellType: .single),
+//    TodayItem(category: "THE DAILY LIST", title: "Test-Drive these CarPlay Apps", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple),
+//  ]
+
+  var items = [TodayItem]()
+
+  let activityIndicatorView: UIActivityIndicatorView = {
+    let view = UIActivityIndicatorView(style: .large)
+    view.color = .darkGray
+    view.startAnimating()
+    view.hidesWhenStopped = true
+    return view
+  }()
 
   var startingFrame: CGRect?
   var appFullscreenController: AppFullscreenController?
@@ -29,6 +39,11 @@ class TodayController: BaseListController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    view.addSubview(activityIndicatorView)
+    activityIndicatorView.centerInSuperview()
+
+    fetchData()
 
     navigationController?.setNavigationBarHidden(true, animated: false)
 
@@ -63,6 +78,38 @@ class TodayController: BaseListController {
       self.appFullscreenController?.removeFromParent()
       self.collectionView.isUserInteractionEnabled = true
     })
+  }
+
+  // MARK: - API Methods
+
+  private func fetchData() {
+    let dispathGroup = DispatchGroup()
+
+    var topGrossingGroup: AppGroup?
+    var gamesGroup: AppGroup?
+
+    dispathGroup.enter()
+    Service.shared.fetchTopGrossing { (appGroup, error) in
+      // make sure to check your errors
+      topGrossingGroup = appGroup
+      dispathGroup.leave()
+    }
+
+    dispathGroup.enter()
+    Service.shared.fetchGames { (appGroup, error) in
+      gamesGroup = appGroup
+      dispathGroup.leave()
+    }
+
+    dispathGroup.notify(queue: .main) {
+      self.activityIndicatorView.stopAnimating()
+      self.items = [
+        TodayItem(category: "Daily List", title: topGrossingGroup?.feed.title ?? "", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple, apps: topGrossingGroup?.feed.results ?? []),
+        TodayItem(category: "Daily List", title: gamesGroup?.feed.title ?? "", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple, apps: gamesGroup?.feed.results ?? []),
+        TodayItem(category: "LIFT HACK", title: "Utilizing your Time", image: UIImage(named: "garden") ?? UIImage(), description: "All the tools and apps you need to intelligently organize your life theright way.", backgroundColor: .white, cellType: .single, apps: [])
+      ]
+      self.collectionView.reloadData()
+    }
   }
 }
 

@@ -25,10 +25,6 @@ class TodayMultipleAppsController: BaseListController {
 
     collectionView.register(MultipleAppCell.self, forCellWithReuseIdentifier: cellId)
 
-    Service.shared.fetchGames { (appGroups, error) in
-      self.results = appGroups?.feed.results ?? []
-      DispatchQueue.main.async { self.collectionView.reloadData() }
-    }
   }
 }
 
