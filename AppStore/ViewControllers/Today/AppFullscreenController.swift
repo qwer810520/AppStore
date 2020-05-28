@@ -60,11 +60,12 @@ extension AppFullscreenController {
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     switch indexPath.row {
       case 0:
-      let headerCell = AppFullscreenHeaderCell()
-      headerCell.closeButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
-      headerCell.todayCell.todayItem = todayItem
-      headerCell.todayCell.layer.cornerRadius = 0
-      return headerCell
+        let headerCell = AppFullscreenHeaderCell()
+        headerCell.closeButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        headerCell.todayCell.todayItem = todayItem
+        headerCell.todayCell.layer.cornerRadius = 0
+        headerCell.clipsToBounds = true
+        return headerCell
       default:
         let cell = AppFullscreenDescriptionCell()
         return cell

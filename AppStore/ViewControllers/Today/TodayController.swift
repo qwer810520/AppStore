@@ -128,8 +128,9 @@ class TodayController: BaseListController {
 
         let fullController = TodayMultipleAppsController(mode: .fullscreen)
         fullController.apps = apps
-        present(fullController, animated: true)
-
+        let navi = BackEnabledNavigationController(rootViewController: fullController)
+        navi.modalPresentationStyle = .fullScreen
+        present(navi, animated: true)
       }
       superview = superview?.superview
     }
