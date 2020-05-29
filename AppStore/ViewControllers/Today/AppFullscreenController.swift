@@ -40,6 +40,12 @@ class AppFullscreenController: UITableViewController {
   // MARK: - UITableViewDelegate
 
 extension AppFullscreenController {
+  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard scrollView.contentOffset.y < 0 else { return }
+    scrollView.isScrollEnabled = false
+    scrollView.isScrollEnabled = true
+  }
+
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     switch indexPath.row {
       case 0:
@@ -65,6 +71,7 @@ extension AppFullscreenController {
         headerCell.todayCell.todayItem = todayItem
         headerCell.todayCell.layer.cornerRadius = 0
         headerCell.clipsToBounds = true
+        headerCell.todayCell.backgroundColor = nil
         return headerCell
       default:
         let cell = AppFullscreenDescriptionCell()

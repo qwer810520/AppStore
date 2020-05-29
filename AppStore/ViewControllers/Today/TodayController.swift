@@ -20,9 +20,12 @@ class TodayController: BaseListController {
     return view
   }()
 
+  let blurVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+
   var startingFrame: CGRect?
   var appFullscreenController: AppFullscreenController?
   var anchoredCOnstraints: AnchoredConstraints?
+  var appFullscreenBeginOffset: CGFloat = 0
   static let cellSizeHeight: CGFloat = 500
 
   // MARK: - UIViewController
@@ -31,6 +34,10 @@ class TodayController: BaseListController {
     super.viewDidLoad()
 
     view.addSubview(activityIndicatorView)
+    view.addSubview(blurVisualEffectView)
+    blurVisualEffectView.fillSuperview()
+    blurVisualEffectView.alpha = 0
+
     activityIndicatorView.centerInSuperview()
 
     fetchData()
@@ -44,12 +51,15 @@ class TodayController: BaseListController {
 
   // MARK: - Private Methods
 
-  private func handleRemoveRedView() {
+  private func handleAppFullscreenDismissal() {
     UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
       
       self.appFullscreenController?.tableView.contentOffset = .zero
 
       guard let startingFrame = self.startingFrame else { return }
+
+      self.blurVisualEffectView.alpha = 0
+      self.appFullscreenController?.view.transform = .identity
 
       self.anchoredCOnstraints?.top?.constant = startingFrame.origin.y
       self.anchoredCOnstraints?.leading?.constant = startingFrame.origin.x
@@ -61,6 +71,7 @@ class TodayController: BaseListController {
       self.tabBarController?.tabBar.frame.origin.y = self.view.frame.maxY - (self.tabBarController?.tabBar.frame.height ?? 0)
 
       guard let cell = self.appFullscreenController?.tableView.cellForRow(at: [0, 0]) as? AppFullscreenHeaderCell else { return }
+      cell.closeButton.alpha = 0
       cell.todayCell.topConstraint?.constant = 24
       cell.layoutIfNeeded()
     }, completion: { _ in
@@ -82,19 +93,22 @@ class TodayController: BaseListController {
     let appFullscreenController = AppFullscreenController()
     appFullscreenController.todayItem = items[indexPath.item]
     appFullscreenController.dismissHandler = { [weak self] in
-      self?.handleRemoveRedView()
+      self?.handleAppFullscreenDismissal()
     }
 
     appFullscreenController.view.layer.cornerRadius = 16
     self.appFullscreenController = appFullscreenController
+
+    // #1 setup our pan gesture
+    let gesture = UIPanGestureRecognizer(target: self, action: #selector(handleDrag))
+    gesture.delegate = self
+    appFullscreenController.view.addGestureRecognizer(gesture)
   }
 
   private func setupStartingCellFrame(_ indexPath: IndexPath) {
     guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-
-       guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
-       self.startingFrame = startingFrame
-
+    guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
+    self.startingFrame = startingFrame
   }
 
   private func setupAppFullscreenStartingPosition(_ indexPath: IndexPath) {
@@ -117,7 +131,7 @@ class TodayController: BaseListController {
 
   private func beginAnimationAppFullscreen() {
     UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
-
+      self.blurVisualEffectView.alpha = 1
       self.anchoredCOnstraints?.top?.constant = 0
       self.anchoredCOnstraints?.leading?.constant = 0
       self.anchoredCOnstraints?.width?.constant = self.view.frame.width
@@ -198,6 +212,39 @@ class TodayController: BaseListController {
       }
       superview = superview?.superview
     }
+  }
+
+  @objc private func handleDrag(gesture: UIPanGestureRecognizer) {
+    if gesture.state == .began {
+      appFullscreenBeginOffset = appFullscreenController?.tableView.contentOffset.y ?? 0
+    }
+
+    guard (appFullscreenController?.tableView.contentOffset.y ?? 0) <= CGFloat(0) else { return }
+    let translationY = gesture.translation(in: appFullscreenController?.view).y
+
+    guard translationY > 0 else { return }
+    switch gesture.state {
+      case .ended:
+        handleAppFullscreenDismissal()
+      case .changed:
+        let trueOffset = translationY - appFullscreenBeginOffset
+        var scale = 1 - trueOffset / 1000
+
+        scale = min(1, scale)
+        scale = max(0.5, scale)
+        
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+        self.appFullscreenController?.view.transform = transform
+      default: break
+    }
+  }
+}
+
+  // MARK: - UIGestureRecognizerDelegate
+
+extension TodayController: UIGestureRecognizerDelegate {
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return true
   }
 }
 
