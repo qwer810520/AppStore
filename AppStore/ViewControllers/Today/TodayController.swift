@@ -71,7 +71,7 @@ class TodayController: BaseListController {
       self.tabBarController?.tabBar.frame.origin.y = self.view.frame.maxY - (self.tabBarController?.tabBar.frame.height ?? 0)
 
       guard let cell = self.appFullscreenController?.tableView.cellForRow(at: [0, 0]) as? AppFullscreenHeaderCell else { return }
-      cell.closeButton.alpha = 0
+      self.appFullscreenController?.closeButton.alpha = 0
       cell.todayCell.topConstraint?.constant = 24
       cell.layoutIfNeeded()
     }, completion: { _ in
