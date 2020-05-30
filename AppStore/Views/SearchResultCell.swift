@@ -20,13 +20,15 @@ class SearchResultCell: UICollectionViewCell {
       let url = URL(string: appResult.artworkUrl100)
       appIconImageView.sd_setImage(with: url)
 
-      screenshort1ImageView.sd_setImage(with: URL(string: appResult.screenshotUrls[0]))
-      if appResult.screenshotUrls.count > 1 {
-        screenshort2ImageView.sd_setImage(with: URL(string: appResult.screenshotUrls[1]))
+      guard let screenshotUrls = appResult.screenshotUrls else { return }
+
+      screenshort1ImageView.sd_setImage(with: URL(string: screenshotUrls[0]))
+      if screenshotUrls.count > 1 {
+        screenshort2ImageView.sd_setImage(with: URL(string: screenshotUrls[1]))
       }
 
-      if appResult.screenshotUrls.count > 2 {
-        screenshort3ImageView.sd_setImage(with: URL(string: appResult.screenshotUrls[2]))
+      if screenshotUrls.count > 2 {
+        screenshort3ImageView.sd_setImage(with: URL(string: screenshotUrls[2]))
       }
     }
   }

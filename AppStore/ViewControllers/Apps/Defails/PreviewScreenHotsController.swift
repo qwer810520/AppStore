@@ -50,14 +50,14 @@ class PreviewScreenHotsController: HorizontalSnappingController {
 
 extension PreviewScreenHotsController {
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return app?.screenshotUrls.count ?? 0
+    return app?.screenshotUrls?.count ?? 0
   }
 
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? ScreensHotCell else {
       fatalError("ScreensHotCell Initialization Fail")
     }
-    cell.imageView.sd_setImage(with: URL(string: app?.screenshotUrls[indexPath.item] ?? ""))
+    cell.imageView.sd_setImage(with: URL(string: app?.screenshotUrls?[indexPath.item] ?? ""))
     return cell
   }
 }
