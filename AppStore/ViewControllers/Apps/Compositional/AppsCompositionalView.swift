@@ -32,6 +32,24 @@ class CompositionalController: UICollectionViewController {
     super.init(collectionViewLayout: layout)
   }
 
+  lazy var diffanleDataSource: UICollectionViewDiffableDataSource<AppSection, AnyHashable> = .init(collectionView: self.collectionView) { (collectionView, indexPath, object) -> UICollectionViewCell? in
+    if let app = object as? SocialApp {
+      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as? AppsHeaderCell else {
+        fatalError("AppsHeaderCell Initialization Fail")
+      }
+      cell.app = app
+      return cell
+    } else if let app = object as? FeedResult {
+      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as? AppRowCell else {
+        fatalError("AppRowCell Initialization Fail")
+      }
+      cell.app = app
+      cell.getButton.addTarget(self, action: #selector(self.handleGet), for: .primaryActionTriggered)
+      return cell
+    }
+    return nil
+  }
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -53,6 +71,10 @@ class CompositionalController: UICollectionViewController {
     }
   }
 
+  enum AppSection {
+    case topSocial, grossing, games, topFree
+  }
+
   let headerId = "headerId"
   var socialApps = [SocialApp]()
   var games = [AppGroup]()
@@ -69,10 +91,55 @@ class CompositionalController: UICollectionViewController {
     collectionView.register(AppRowCell.self, forCellWithReuseIdentifier: "smallCellId")
     collectionView.register(CompositionalHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
 
-    fetchApps()
+    navigationItem.rightBarButtonItem = .init(title: "Fetch Top Free", style: .plain, target: self, action: #selector(handleFetchTopFree))
+
+    collectionView.refreshControl = UIRefreshControl()
+    collectionView.refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+
+//    fetchApps()
+    setupDiffanleDataSource()
   }
 
   // MARK: - Private Methods
+
+  private func setupDiffanleDataSource() {
+    collectionView.dataSource = diffanleDataSource
+
+    diffanleDataSource.supplementaryViewProvider = .some({ (collectionView, kind, indexPath) -> UICollectionReusableView? in
+      guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: self.headerId, for: indexPath) as? CompositionalHeader else {
+        fatalError("CompositionalHeader Initialization Fail")
+      }
+
+      let snapshot = self.diffanleDataSource.snapshot()
+      if let object = self.diffanleDataSource.itemIdentifier(for: indexPath), let section = snapshot.sectionIdentifier(containingItem: object) {
+        switch section {
+          case .games:
+            header.label.text = "Games"
+          case .grossing:
+            header.label.text = "Top Grossing"
+          case .topFree:
+            header.label.text = "Top Free"
+          default: break
+        }
+      }
+
+      return header
+    })
+
+    Service.shared.fetchSocialApps { (apps, error) in
+      Service.shared.fetchTopGrossing { (appGroup, error) in
+        Service.shared.fetchGames { (gameGroup, error) in
+          var snapsshot = self.diffanleDataSource.snapshot()
+          snapsshot.appendSections([.topSocial, .games, .grossing ])
+          snapsshot.appendItems(apps ?? [], toSection: .topSocial)
+          snapsshot.appendItems(appGroup?.feed.results ?? [], toSection: .grossing)
+          snapsshot.appendItems(gameGroup?.feed.results ?? [], toSection: .games)
+
+          self.diffanleDataSource.apply(snapsshot)
+        }
+      }
+    }
+  }
 
   static func topSection() -> NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
@@ -128,6 +195,41 @@ class CompositionalController: UICollectionViewController {
       self.collectionView.reloadData()
     }
   }
+
+  // MARK: - Action Methods
+
+  @objc private func handleGet(button: UIView) {
+    var superview = button.superview
+
+    while superview != nil {
+      if let cell = superview as? UICollectionViewCell {
+        guard let indexPath = collectionView.indexPath(for: cell), let objectIClickedOnto = diffanleDataSource.itemIdentifier(for: indexPath) else { return }
+        print("objectIClickedOnto: \(objectIClickedOnto)")
+        var snapshot = diffanleDataSource.snapshot()
+        snapshot.deleteItems([objectIClickedOnto])
+        diffanleDataSource.apply(snapshot)
+      }
+      superview = superview?.superview
+    }
+  }
+
+  @objc private func handleFetchTopFree() {
+    Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/50/explicit.json") { (appGroup, error) in
+      var snapshot = self.diffanleDataSource.snapshot()
+      snapshot.insertSections([.topFree], afterSection: .topSocial)
+      snapshot.appendItems(appGroup?.feed.results ?? [], toSection: .topFree)
+      self.diffanleDataSource.apply(snapshot)
+    }
+  }
+
+  @objc private func handleRefresh() {
+    collectionView.refreshControl?.endRefreshing()
+    var snapshot = diffanleDataSource.snapshot()
+    snapshot.deleteSections([.topFree, .games, .grossing])
+    
+
+    diffanleDataSource.apply(snapshot)
+  }
 }
 
   // MARK: - UICollectionViewDelegate
@@ -143,12 +245,20 @@ extension CompositionalController {
 
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     var appId = ""
+    /*
     switch indexPath.section {
       case 0:
         appId = socialApps[indexPath.item].id
       case 1:
         appId = games[indexPath.section - 1].feed.results[indexPath.item].id
       default: break
+    }
+     */
+    let object = diffanleDataSource.itemIdentifier(for: indexPath)
+    if let object = object as? SocialApp {
+      appId = object.id
+    } else if let object = object as? FeedResult {
+      appId = object.id
     }
     let appDetailController = AppDetailController(appId: appId)
     navigationController?.pushViewController(appDetailController, animated: true)
@@ -159,9 +269,10 @@ extension CompositionalController {
 
 extension CompositionalController {
   override func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return games.count + 1
+//    return games.count + 1
+    return 0
   }
-
+  /*
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     switch section {
       case 0:
@@ -193,6 +304,7 @@ extension CompositionalController {
         return cell
     }
   }
+  */
 }
 
   // MARK: - UIViewControllerRepresentable

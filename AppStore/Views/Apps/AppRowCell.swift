@@ -10,6 +10,15 @@ import UIKit
 
 class AppRowCell: UICollectionViewCell {
 
+  var app: FeedResult? {
+    didSet {
+      guard let app = app else { return }
+      companyLabel.text = app.name
+      nameLabel.text = app.name
+      imageView.sd_setImage(with: URL(string: app.artworkUrl100))
+    }
+  }
+
   let imageView: UIImageView = {
     return UIImageView(cornerRadius: 8)
   }()

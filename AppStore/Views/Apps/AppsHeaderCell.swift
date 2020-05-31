@@ -10,6 +10,15 @@ import UIKit
 
 class AppsHeaderCell: UICollectionViewCell {
 
+  var app: SocialApp? {
+    didSet {
+      guard let app = app else { return }
+      companyLabel.text = app.name
+      titleLabel.text = app.tagline
+      imageView.sd_setImage(with: URL(string: app.imageUrl))
+    }
+  }
+
   let companyLabel: UILabel = {
     let label = UILabel(text: "Facebook", font: .boldSystemFont(ofSize: 12))
     label.textColor = .blue
