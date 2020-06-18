@@ -4,7 +4,7 @@
 
 ### Today
 <img alt="01_screen" src="screenshots/01.PNG?raw=true" width="280">&nbsp;
-<img alt="05_screen" src="screenshots/05.gif?raw=true" width="280">&nbsp;
+<img alt="05_screen" src="screenshots/05.gif?raw=true" width="380">&nbsp;
 
 ### Apps
 <img alt="02_screen" src="screenshots/02.PNG?raw=true" width="280">&nbsp;
