@@ -184,8 +184,8 @@ class TodayController: BaseListController {
       self.items = [
         TodayItem(category: "LIFT HACK", title: "Utilizing your Time", image: UIImage(named: "garden") ?? UIImage(), description: "All the tools and apps you need to intelligently organize your life theright way.", backgroundColor: .white, cellType: .single, apps: []),
         TodayItem(category: "Daily List", title: topGrossingGroup?.feed.title ?? "", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple, apps: topGrossingGroup?.feed.results ?? []),
-        TodayItem(category: "Daily List", title: gamesGroup?.feed.title ?? "", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple, apps: gamesGroup?.feed.results ?? []),
         TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: UIImage(named: "holiday") ?? UIImage(), description: "Find out all you need to know on how to travel without packing everything", backgroundColor: #colorLiteral(red: 0.9774419665, green: 0.9603155255, blue: 0.7258630395, alpha: 1), cellType: .single, apps: []),
+        TodayItem(category: "Daily List", title: gamesGroup?.feed.title ?? "", image: UIImage(named: "garden") ?? UIImage(), description: "", backgroundColor: .white, cellType: .mutltiple, apps: gamesGroup?.feed.results ?? []),
       ]
       self.collectionView.reloadData()
     }
